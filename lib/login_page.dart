@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'pages/auth/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -76,45 +77,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   Future<void> signup() async {
-    if (!_formKey.currentState!.validate()) return;
-    
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      await supabase.auth.signUp(
-        email: emailController.text.trim(),
-        password: passwordController.text,
-      );
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('¡Registro exitoso! Revisa tu correo para confirmar tu cuenta.'),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error al registrarse: $e'),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const RegisterPage(),
+      ),
+    );
   }
 
   @override
@@ -126,9 +93,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.blue.shade400,
-              Colors.blue.shade600,
-              Colors.blue.shade800,
+              Colors.orange.shade400,
+              Colors.orange.shade600,
+              Colors.orange.shade800,
             ],
           ),
         ),
@@ -157,19 +124,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             height: 100,
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Colors.blue.shade400, Colors.blue.shade600],
+                                colors: [Colors.orange.shade400, Colors.orange.shade600],
                               ),
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.blue.withOpacity(0.3),
+                                  color: Colors.orange.withOpacity(0.3),
                                   blurRadius: 15,
                                   offset: const Offset(0, 5),
                                 ),
                               ],
                             ),
                             child: const Icon(
-                              Icons.location_on,
+                              Icons.explore,
                               size: 50,
                               color: Colors.white,
                             ),
@@ -178,7 +145,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           
                           // Title
                           Text(
-                            'GPS Tracker',
+                            'El Búho',
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
@@ -188,7 +155,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Encuentra tu ubicación fácilmente',
+                            'Descubre sitios turísticos increíbles',
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey.shade600,
@@ -212,7 +179,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             },
                             decoration: InputDecoration(
                               labelText: 'Email',
-                              prefixIcon: Icon(Icons.email_outlined, color: Colors.blue.shade600),
+                              prefixIcon: Icon(Icons.email_outlined, color: Colors.orange.shade600),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide.none,
@@ -221,7 +188,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               fillColor: Colors.grey.shade100,
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
+                                borderSide: BorderSide(color: Colors.orange.shade600, width: 2),
                               ),
                             ),
                           ),
@@ -242,11 +209,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             },
                             decoration: InputDecoration(
                               labelText: 'Contraseña',
-                              prefixIcon: Icon(Icons.lock_outline, color: Colors.blue.shade600),
+                              prefixIcon: Icon(Icons.lock_outline, color: Colors.orange.shade600),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                                  color: Colors.blue.shade600,
+                                  color: Colors.orange.shade600,
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -262,7 +229,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               fillColor: Colors.grey.shade100,
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
+                                borderSide: BorderSide(color: Colors.orange.shade600, width: 2),
                               ),
                             ),
                           ),
@@ -275,13 +242,13 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             child: ElevatedButton(
                               onPressed: _isLoading ? null : login,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue.shade600,
+                                backgroundColor: Colors.orange.shade600,
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 elevation: 8,
-                                shadowColor: Colors.blue.withOpacity(0.4),
+                                shadowColor: Colors.orange.withOpacity(0.4),
                               ),
                               child: _isLoading
                                   ? const SizedBox(
@@ -326,7 +293,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             child: OutlinedButton(
                               onPressed: _isLoading ? null : signup,
                               style: OutlinedButton.styleFrom(
-                                side: BorderSide(color: Colors.blue.shade600, width: 2),
+                                side: BorderSide(color: Colors.orange.shade600, width: 2),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -336,7 +303,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.blue.shade600,
+                                  color: Colors.orange.shade600,
                                 ),
                               ),
                             ),
