@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Permitir tráfico HTTP para todos los dominios (para desarrollo) -->
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system"/>
+            <certificates src="user"/>
+        </trust-anchors>
+    </base-config>
+    
+    <!-- Configuración específica para dominios de imágenes comunes -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">firebasestorage.googleapis.com</domain>
+        <domain includeSubdomains="true">storage.googleapis.com</domain>
+        <domain includeSubdomains="true">proyecto-8a636.firebasestorage.app</domain>
+        <domain includeSubdomains="true">lh3.googleusercontent.com</domain>
+        <domain includeSubdomains="true">supabase.co</domain>
+        <domain includeSubdomains="true">kcklhyrvdzbzlidzwlbm.supabase.co</domain>
+        <domain includeSubdomains="true">imgur.com</domain>
+        <domain includeSubdomains="true">picsum.photos</domain>
+        <domain includeSubdomains="true">via.placeholder.com</domain>
+    </domain-config>
+</network-security-config>

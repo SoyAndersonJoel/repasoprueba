@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../utils/image_helper.dart';
 import 'dart:convert';
 
 class AppImageWidget extends StatelessWidget {
@@ -39,12 +40,18 @@ class AppImageWidget extends StatelessWidget {
         return _buildErrorWidget();
       }
     } else {
+      // Validar la URL antes de cargar
+      if (!ImageHelper.isValidImageUrl(imageUrl)) {
+        return _buildErrorWidget();
+      }
+      
       // Es una URL normal, usar CachedNetworkImage
       return CachedNetworkImage(
-        imageUrl: imageUrl,
+        imageUrl: ImageHelper.cleanImageUrl(imageUrl),
         width: width,
         height: height,
         fit: fit,
+        httpHeaders: ImageHelper.getImageHeaders(),
         placeholder: (context, url) => Container(
           width: width,
           height: height,
@@ -53,7 +60,10 @@ class AppImageWidget extends StatelessWidget {
             child: CircularProgressIndicator(),
           ),
         ),
-        errorWidget: (context, url, error) => _buildErrorWidget(),
+        errorWidget: (context, url, error) {
+          print('Error loading image in AppImageWidget: $error');
+          return _buildErrorWidget();
+        },
       );
     }
   }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'dart:convert';
 import '../../models/app_models.dart';
 import '../../providers/app_provider.dart';
 import '../../services/firebase_service.dart';
 import '../../widgets/reply_widget.dart';
+import '../../widgets/image_widget.dart';
 
 class SpotDetailPage extends StatefulWidget {
   final TouristSpot spot;
@@ -38,6 +39,24 @@ class _SpotDetailPageState extends State<SpotDetailPage> {
     _pageController.dispose();
     _reviewController.dispose();
     super.dispose();
+  }
+
+  // Función auxiliar para obtener el ImageProvider correcto según el tipo de imagen
+  ImageProvider _getImageProvider(String imageUrl) {
+    if (imageUrl.startsWith('data:image/')) {
+      // Es una imagen Base64
+      try {
+        final base64Data = imageUrl.split(',')[1];
+        final bytes = base64Decode(base64Data);
+        return MemoryImage(bytes);
+      } catch (e) {
+        print('Error decoding Base64 image: $e');
+        return const AssetImage('assets/images/placeholder.png'); // Fallback
+      }
+    } else {
+      // Es una URL normal
+      return NetworkImage(imageUrl);
+    }
   }
 
   Future<void> _loadReviews() async {
@@ -161,7 +180,7 @@ class _SpotDetailPageState extends State<SpotDetailPage> {
                     itemCount: widget.spot.imageUrls.length,
                     builder: (context, index) {
                       return PhotoViewGalleryPageOptions(
-                        imageProvider: CachedNetworkImageProvider(widget.spot.imageUrls[index]),
+                        imageProvider: _getImageProvider(widget.spot.imageUrls[index]),
                         minScale: PhotoViewComputedScale.contained,
                         maxScale: PhotoViewComputedScale.covered * 2,
                       );
@@ -216,17 +235,11 @@ class _SpotDetailPageState extends State<SpotDetailPage> {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () => _showImageGallery(index),
-            child: CachedNetworkImage(
+            child: AppImageWidget(
               imageUrl: widget.spot.imageUrls[index],
+              width: double.infinity,
+              height: 250,
               fit: BoxFit.cover,
-              placeholder: (context, url) => Container(
-                color: Colors.grey.shade200,
-                child: const Center(child: CircularProgressIndicator()),
-              ),
-              errorWidget: (context, url, error) => Container(
-                color: Colors.grey.shade200,
-                child: const Icon(Icons.error, size: 50),
-              ),
             ),
           );
         },

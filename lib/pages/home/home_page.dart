@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../../providers/app_provider.dart';
 import '../../models/app_models.dart';
+import '../../widgets/image_widget.dart';
 import '../spots/spot_detail_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -167,19 +167,11 @@ class _HomePageState extends State<HomePage> {
                 height: 200,
                 width: double.infinity,
                 child: spot.imageUrls.isNotEmpty
-                    ? CachedNetworkImage(
+                    ? AppImageWidget(
                         imageUrl: spot.imageUrls.first,
+                        width: double.infinity,
+                        height: 200,
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          color: Colors.grey.shade200,
-                          child: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          color: Colors.grey.shade200,
-                          child: const Icon(Icons.error, size: 50),
-                        ),
                       )
                     : Container(
                         color: Colors.grey.shade200,
